@@ -16,6 +16,6 @@ Grid init_grid(int height, int width, Pattern start_pattern);
 void print_grid(const Grid &grid);
 int get_alive_neighbour(const Grid &grid, const int row, const int column);
 void next_generation(Grid &grid);
-void update_grid(Grid &grid);
+bool update_grid(Grid &grid);
 
 #endif // !GRID_H

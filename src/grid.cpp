@@ -1,5 +1,6 @@
 #include "../includes/grid.h"
 #include "../includes/patterns.h"
+#include <cstddef>
 #include <iostream>
 #include <vector>
 
@@ -14,10 +15,20 @@ void print_grid(const Grid &grid) {
       if (col.current_state == 1) {
         std::cout << col.current_state;
       } else
-        std::cout << 0;
+        std::cout << '0';
     }
     std::cout << '\n';
   }
+  /*for (size_t row = 0; row < grid.size(); row++) {
+    for (size_t col = 0; col < row; col++) {
+      if (grid[row][col].current_state == 1) {
+        std::cout << grid[row][col].current_state;
+      } else {
+        std::cout << ' ';
+      }
+    }
+    std::cout << '\n';
+  }*/
 }
 
 // bool validate_grid_size(int height, int width, Pattern start_pattern) {}
@@ -39,8 +50,8 @@ Grid init_grid(int height, int width, Pattern start_pattern) {
     grid.push_back(new_row);
   }
   for (Coord c : start_pattern.coords) {
-    grid[start_row + c.row][start_col + c.col].current_state = 1;
-    grid[start_row + c.row][start_col + c.col].next_state = 1;
+    grid[start_row + c.row][start_col + c.col].current_state = ALIVE;
+    grid[start_row + c.row][start_col + c.col].next_state = ALIVE;
   }
 
   return grid;
@@ -84,6 +95,7 @@ void next_generation(Grid &grid) {
   for (int row = 0; row < grid.size(); row++) {
     for (int col = 0; col < grid.at(row).size(); col++) {
       int neighbors_count = get_alive_neighbour(grid, row, col);
+
       if (neighbors_count == 3) {
         grid.at(row).at(col).next_state = ALIVE;
       }
@@ -95,11 +107,22 @@ void next_generation(Grid &grid) {
     }
   }
 }
-
-void update_grid(Grid &grid) {
+/**
+ * @brief update_grid
+ * loops the grid and updates
+ * every columns state to next state
+ * @param grid
+ */
+bool update_grid(Grid &grid) {
+  bool is_changed = false;
   for (auto &row : grid) {
     for (auto &col : row) {
+      if (col.current_state != col.next_state) {
+        is_changed = true;
+      }
+
       col.current_state = col.next_state;
     }
   }
+  return is_changed;
 }

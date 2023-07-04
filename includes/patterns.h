@@ -18,7 +18,7 @@ inline static Pattern blinker{1, 3, {{0, 0}, {0, 1}, {0, 2}}};
 
 inline static Pattern block{2, 2, {{0, 0}, {0, 1}, {1, 0}, {1, 1}}};
 
-inline static Pattern glider{3, 3, {{0, 0}, {0, 2}, {1, 1}, {1, 2}, {2, 1}}};
+inline static Pattern glider{3, 3, {{0, 1}, {1, 2}, {2, 0}, {2, 1}, {2, 2}}};
 
 inline static Pattern gosper_glider_gun{
     11, 38, {{1, 25}, {2, 23}, {2, 25}, {3, 13}, {3, 14}, {3, 21},
