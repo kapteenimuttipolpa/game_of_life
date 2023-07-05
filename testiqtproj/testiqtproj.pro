@@ -11,11 +11,13 @@ CONFIG += c++17
 SOURCES += \
     grid.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mygraphicsview.cpp
 
 HEADERS += \
     grid.h \
     mainwindow.h \
+    mygraphicsview.h \
     patterns.h \
     utils.h
 
