@@ -6,7 +6,7 @@
 #include "patterns.h"
 #include <QtWidgets>
 #include <QMouseEvent>
-
+#include <QAbstractItemView>
 Dialog::Dialog(MainWindow* mainWindow, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog),
@@ -18,8 +18,8 @@ Dialog::Dialog(MainWindow* mainWindow, QWidget *parent) :
     palette.setColor(palette.Window, Qt::black);
     ui->heightLcdNumber->setPalette(palette);
     ui->widthLcdNumber->setPalette(palette);
-}
 
+}
 Dialog::~Dialog()
 {
     delete ui;
