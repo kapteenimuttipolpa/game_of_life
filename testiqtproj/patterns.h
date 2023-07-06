@@ -8,7 +8,6 @@ struct Coord {
   int row{};
   int col{};
 };
-
 struct Pattern {
   int height{};
   int width{};
@@ -55,6 +54,6 @@ inline static Pattern diamond_4_8_12{
           {4, 0}, {4,1}, {4,2}, {4,3}, {4,4}, {4,5}, {4,6}, {4,7}, {4,8}, {4,9},
           {4,10}, {4,11}, {6,2}, {6,3}, {6,4}, {6,5}, {6,6},{6,7}, {6,8}, {6,9},
           {8, 4}, {8, 5}, {8, 6}, {8, 7}}};
-
+inline static std::vector<Pattern> custom_patterns;
 inline static std::vector<Pattern> all_patterns  {blinker, block, glider, gosper_glider_gun, c_heptomino, biloaf, octagon_II, copperhead, diamond_4_8_12};
 #endif // !UTILS_H

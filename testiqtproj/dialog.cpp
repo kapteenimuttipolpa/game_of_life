@@ -1,6 +1,11 @@
 #include "dialog.h"
 #include "ui_dialog.h"
 #include "mainwindow.h"
+#include "customgraphicsview.h"
+#include "utils.h"
+#include "patterns.h"
+#include <QtWidgets>
+#include <QMouseEvent>
 
 Dialog::Dialog(MainWindow* mainWindow, QWidget *parent) :
     QDialog(parent),
@@ -24,7 +29,6 @@ void Dialog::on_buttonBox_accepted()
 {
     close();
     main_window->show();
-
 }
 
 
@@ -51,4 +55,20 @@ void Dialog::on_comboBox_activated(int index)
 {
     main_window->set_current_pattern(index);
 }
+
+
+void Dialog::on_RandpushButton_clicked()
+{
+    int lsize = main_window->get_lsize();
+    int rsize = main_window->get_rsize();
+    if(lsize == 0 or rsize == 0){
+        return;
+    }
+    Pattern rand_p = Utils::random_pattern(lsize, rsize);
+    main_window->set_curr_pat(rand_p);
+    close();
+    main_window->on_clearButton_clicked();
+    main_window->show();
+}
+
 

@@ -31,12 +31,12 @@ MainWindow::MainWindow(QWidget *parent)
  //   grid_view->setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
     scene = new QGraphicsScene(this);
     grid_view->setCacheMode(QGraphicsView::CacheBackground);
-    grid_view->setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
+    grid_view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
     grid_view->setRenderHint(QPainter::Antialiasing, true);
 
+
+
     print_grid(grid, grid_view, scene);
-
-
     // Create the button and connect its clicked signal to your slot function
     nextButton = new QPushButton("Next Generation", this);
     connect(nextButton, &QPushButton::clicked, this, &MainWindow::on_pushButton_clicked);
@@ -87,8 +87,10 @@ MainWindow::MainWindow(QWidget *parent)
     centralWidget->setLayout(mainLayout);
     // Set the central widget
     setCentralWidget(centralWidget);
+
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout,this, &MainWindow::on_pushButton_clicked);
+
 
 }
 
@@ -115,11 +117,11 @@ void MainWindow::on_startButton_clicked(){
 }
 void MainWindow::on_stopButton_clicked(){
     timer->stop();
-    active_grid.clear();
 }
 void MainWindow::on_clearButton_clicked(){
     timer->stop();
     active_grid.clear();
+    scene->clear();
 
     grid = init_grid(active_grid, lsize, rsize, current_pattern);
     print_grid(grid, grid_view, scene);
@@ -160,4 +162,13 @@ void MainWindow::set_grid_width(int width){
     grid = init_grid(active_grid, lsize, rsize, current_pattern);
     print_grid(grid, grid_view, scene);
 
+}
+int MainWindow::get_lsize(){
+    return lsize;
+}
+int MainWindow::get_rsize(){
+    return rsize;
+}
+void MainWindow::set_curr_pat(Pattern rand){
+    current_pattern = rand;
 }

@@ -1,16 +1,14 @@
 #ifndef UTILS_H
 #define UTILS_H
-
+#include "patterns.h"
+#include "mainwindow.h"
 #include <chrono>
 #include <thread>
+namespace Utils {
+    int random_num(int a, int b);
+    Pattern random_pattern(int height, int width);
 
-inline constexpr static int SLOW = 1000;
-inline constexpr static int MEDIUM = 350;
-inline constexpr static int FAST = 100;
-
-inline void sleep(int ms) {
-
-  std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }
+
 
 #endif // !UTILS_H

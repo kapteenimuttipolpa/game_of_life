@@ -2,6 +2,7 @@
 #define DIALOG_H
 #include "mainwindow.h"
 #include <QDialog>
+#include <QMouseEvent>
 //class MainWindow;
 namespace Ui {
 class Dialog;
@@ -24,6 +25,10 @@ private slots:
     void on_heightSlider_sliderReleased();
 
     void on_comboBox_activated(int index);
+
+
+    void on_RandpushButton_clicked();
+
 
 private:
     Ui::Dialog *ui;

@@ -18,19 +18,24 @@
 void print_grid(const Grid &grid, QGraphicsView* grid_view, QGraphicsScene* scene) {
     constexpr int cell_size = 4;
     constexpr int spacing = 1;
-
+    scene->setForegroundBrush(Qt::NoBrush);
     for (size_t row = 0; row < grid.size(); ++row) {
         for (size_t col = 0; col < grid[row].size(); ++col) {
-                QColor color = grid[row][col].current_state == 1 ? Qt::black : Qt::white;
+            if(grid[row][col].current_state == ALIVE){
+                QColor color = Qt::black;
                 scene->addRect(col * (cell_size + spacing),
                                row * (cell_size + spacing),
                                cell_size,
                                cell_size,
                                QPen(Qt::NoPen),
                                QBrush(color));
+            }
+
         }
     }
     grid_view->setScene(scene);
+    //grid_view->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
+
 
 }
 

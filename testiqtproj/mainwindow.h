@@ -21,6 +21,10 @@ public:
     void set_grid_height(int height);
     void set_grid_width(int width);
     void set_current_pattern(int index);
+    void set_curr_pat(Pattern rand);
+    void on_clearButton_clicked();
+    int get_lsize();
+    int get_rsize();
     ~MainWindow();
 
 private slots:
@@ -28,7 +32,8 @@ private slots:
     void on_startButton_clicked();
     void perform_grid_update();
     void on_stopButton_clicked();
-    void on_clearButton_clicked();
+    //void on_clearButton_clicked();
+
    // void set_current_pattern(int index);
 
     void on_speedSlider_sliderMoved();
@@ -43,7 +48,7 @@ private:
     QPushButton* stopButton;
     QPushButton* clearButton;
     QTimer* timer;
-    Pattern current_pattern = blinker;
+    Pattern current_pattern = copperhead;
     QComboBox* user_pattern_choise;
     QComboBox* comboBox;
     Grid grid;
