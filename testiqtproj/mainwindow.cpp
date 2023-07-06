@@ -17,9 +17,9 @@
 #include <QComboBox>
 #include <QDebug>
 #include <QSlider>
-#define current_layout diamond_4_8_12
-#define lsize 100 // max size 400
-#define rsize 100 // max size 400
+//#define current_layout diamond_4_8_12
+//#define lsize 100 // max size 400
+//#define rsize 100 // max size 400
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -27,13 +27,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    //grid_view = new myGraphicsView(this);
     grid_view = new MyGraphicsView(this);
-    grid_view->setBackgroundBrush(Qt::gray);
-
+ //   grid_view->setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
     scene = new QGraphicsScene(this);
-    grid = init_grid(lsize, rsize, current_pattern);
+    grid_view->setCacheMode(QGraphicsView::CacheBackground);
+    grid_view->setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
+    grid_view->setRenderHint(QPainter::Antialiasing, true);
+
     print_grid(grid, grid_view, scene);
+
 
     // Create the button and connect its clicked signal to your slot function
     nextButton = new QPushButton("Next Generation", this);
@@ -87,6 +89,7 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(centralWidget);
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout,this, &MainWindow::on_pushButton_clicked);
+
 }
 
 MainWindow::~MainWindow()
@@ -100,44 +103,61 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    next_generation(grid);
-    update_grid(grid);
+    next_generation(grid, active_grid);
+    update_grid(grid, active_grid);
     scene->clear();
     print_grid(grid, grid_view, scene);
 }
 
 void MainWindow::on_startButton_clicked(){
+
     timer->start(speed);
 }
 void MainWindow::on_stopButton_clicked(){
     timer->stop();
+    active_grid.clear();
 }
 void MainWindow::on_clearButton_clicked(){
     timer->stop();
-    grid = init_grid(lsize, rsize, current_pattern);
+    active_grid.clear();
+
+    grid = init_grid(active_grid, lsize, rsize, current_pattern);
     print_grid(grid, grid_view, scene);
-    //perform_grid_update();
 }
 void MainWindow::perform_grid_update(){
-    next_generation(grid);
-    bool is_changed = update_grid(grid);
+    bool is_changed = next_generation(grid, active_grid);
     if(!is_changed){
         timer->stop();
     }
+    else update_grid(grid, active_grid);
     scene->clear();
     print_grid(grid, grid_view, scene);
 }
 void MainWindow::set_current_pattern(int index){
     timer->stop();
+    active_grid.clear();
     scene->clear();
     current_pattern = all_patterns[index];
-    grid = init_grid(lsize, rsize, current_pattern);
+    grid = init_grid(active_grid, lsize, rsize, current_pattern);
     print_grid(grid, grid_view, scene);
 }
 
 void MainWindow::on_speedSlider_sliderMoved()
 {
     speed = speedSlider->value();
-    // timer->
     timer->setInterval(speed);
+}
+void MainWindow::set_grid_height(int height){
+    lsize = height;
+    scene->clear();
+    grid = init_grid(active_grid, lsize, rsize, current_pattern);
+    print_grid(grid, grid_view, scene);
+
+}
+void MainWindow::set_grid_width(int width){
+    rsize = width;
+    scene->clear();
+    grid = init_grid(active_grid, lsize, rsize, current_pattern);
+    print_grid(grid, grid_view, scene);
+
 }

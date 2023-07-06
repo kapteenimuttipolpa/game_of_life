@@ -16,36 +16,21 @@
  * @param grid
  */
 void print_grid(const Grid &grid, QGraphicsView* grid_view, QGraphicsScene* scene) {
-    const int cell_size = 5;
-    const int spacing = 1;
+    constexpr int cell_size = 4;
+    constexpr int spacing = 1;
 
     for (size_t row = 0; row < grid.size(); ++row) {
         for (size_t col = 0; col < grid[row].size(); ++col) {
-            QColor color = grid[row][col].color;
-            scene->addRect(col * (cell_size + spacing),
-                           row * (cell_size + spacing),
-                           cell_size,
-                           cell_size,
-                           QPen(Qt::NoPen),
-                           QBrush(color));
+                QColor color = grid[row][col].current_state == 1 ? Qt::black : Qt::white;
+                scene->addRect(col * (cell_size + spacing),
+                               row * (cell_size + spacing),
+                               cell_size,
+                               cell_size,
+                               QPen(Qt::NoPen),
+                               QBrush(color));
         }
     }
-
-    QRectF boundingRect = scene->itemsBoundingRect();
-
-    // Set the scene rect to match the bounding rectangle with some optional padding
-    int padding = 5;
-    scene->setSceneRect(boundingRect.adjusted(-padding, -padding, padding, padding));
-
-    // Set the scene to the QGraphicsView
     grid_view->setScene(scene);
-
-    // Calculate the size needed for the QGraphicsView based on the grid data
-    int viewWidth = scene->width() + grid_view->frameWidth() * 2;
-    int viewHeight = scene->height() + grid_view->frameWidth() * 2;
-
-    // Set the fixed size for the QGraphicsView
-    grid_view->setFixedSize(viewWidth, viewHeight);
 
 }
 
@@ -54,27 +39,25 @@ void print_grid(const Grid &grid, QGraphicsView* grid_view, QGraphicsScene* scen
 /*
 **  Initializes grid with given size and selected pattern
 */
-Grid init_grid(int height, int width, Pattern start_pattern) {
-    int start_row = (height / 2) - (start_pattern.height / 2);
-    int start_col = (width / 2) - (start_pattern.width / 2);
+Grid init_grid(Subgrid& active_grid, int height, int width, Pattern& start_pattern) {
+  int start_row = (height / 2) - (start_pattern.height / 2);
+  int start_col = (width / 2) - (start_pattern.width / 2);
 
-    Grid grid{};
-    for (int row = 0; row < height; ++row) {
-        std::vector<Cell> new_row;
-        for (int col = 0; col < width; ++col) {
-            Cell new_cell{};
-            new_row.push_back(new_cell);
-
-        }
-        grid.push_back(new_row);
+  Grid grid{};
+  for (int row = 0; row < height; ++row) {
+    std::vector<Cell> new_row;
+    for (int col = 0; col < width; ++col) {
+      //Cell new_cell{};
+        new_row.push_back({});
     }
-    for (Coord c : start_pattern.coords) {
-        grid[start_row + c.row][start_col + c.col].current_state = ALIVE;
-        grid[start_row + c.row][start_col + c.col].next_state = ALIVE;
-        grid[start_row + c.row][start_col + c.col].color = Qt::black;
-    }
+    grid.push_back(new_row);
+  }
+  for (Coord c : start_pattern.coords) {
+    active_grid.push_back({start_row + c.row, start_col + c.col});
+    grid[start_row + c.row][start_col + c.col].current_state = ALIVE;
+  }
 
-    return grid;
+  return grid;
 }
 
 /**
@@ -91,7 +74,6 @@ int get_alive_neighbour(const Grid &grid, const int row, const int column) {
     int count = 0;
     int rows = grid.size();
     int cols = grid[0].size();
-
     for (int x = row - 1; x <= row + 1; x++) {
         for (int y = column - 1; y <= column + 1; y++) {
             if (x == row && y == column) {
@@ -103,8 +85,22 @@ int get_alive_neighbour(const Grid &grid, const int row, const int column) {
             }
         }
     }
-
     return count;
+}
+
+/**
+ * @brief coord_found
+ * @param coords
+ * @param targetCoord
+ * @return
+ */
+bool coord_found(const std::vector<Coord>& coords, const Coord& targetCoord) {
+  for (const Coord& coord : coords) {
+    if (coord.row == targetCoord.row && coord.col == targetCoord.col) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -112,21 +108,36 @@ int get_alive_neighbour(const Grid &grid, const int row, const int column) {
  * Changes the state of cells if needed.
  * @param grid
  */
-void next_generation(Grid &grid) {
-    for (size_t row = 0; row < grid.size(); row++) {
-        for (size_t col = 0; col < grid.at(row).size(); col++) {
-            int neighbors_count = get_alive_neighbour(grid, row, col);
-
-            if (neighbors_count == 3) {
-                grid.at(row).at(col).next_state = ALIVE;
-            }
-
-            else if ((neighbors_count <= 1 || neighbors_count >= 4) &&
-                     (grid.at(row).at(col).current_state == ALIVE)) {
-                grid.at(row).at(col).next_state = DEAD;
-            }
+bool next_generation(Grid &grid, Subgrid& active_grid) {
+  Subgrid temp_grid {};
+  bool is_changed = false;
+  for (Coord c : active_grid) {
+    for (int x = c.row - 1; x <= c.row + 1; x++) { // loop the neightbors of alive cells
+      for (int y = c.col - 1; y <= c.col + 1; y++) {
+        if (x < 0 || static_cast<size_t>(x) >= grid.size() || y < 0 || static_cast<size_t>(y) >= grid[0].size())
+          continue;
+        if (coord_found(temp_grid, {x, y})) // check if current coord is already in temp grid
+          continue;
+        int neighbors_count = get_alive_neighbour(grid, x, y); // if not, get its neighbors
+        if (neighbors_count == 3)
+        {
+          temp_grid.push_back({x, y});
         }
+        else if (neighbors_count == 2 && x == c.row && y == c.col)
+        {
+          temp_grid.push_back({x, y});
+        }
+      }
     }
+  }
+  for (size_t i = 0; i < active_grid.size(); i++)
+  {
+    if (active_grid[i].col == temp_grid[i].col && active_grid[i].row == temp_grid[i].row)
+      continue ;
+    is_changed = true;
+  }
+  active_grid = temp_grid;
+  return is_changed;
 }
 /**
  * @brief update_grid
@@ -134,17 +145,15 @@ void next_generation(Grid &grid) {
  * every columns state to next state
  * @param grid
  */
-bool update_grid(Grid &grid) {
-    bool is_changed = false;
-    for (auto &row : grid) {
-        for (auto &col : row) {
-            if (col.current_state != col.next_state) {
-                is_changed = true;
-            }
-
-            col.current_state = col.next_state;
-            col.color = (col.current_state == 1) ? Qt::black : Qt::white;
-        }
+void update_grid(Grid &grid, Subgrid& active_grid) {
+  for (auto& row : grid) {
+    for (auto& col : row)
+    {
+      col.current_state = DEAD;
     }
-    return is_changed;
+  }
+  for (Coord c : active_grid) {
+    grid[c.row][c.col].current_state = ALIVE;
+  }
 }
+
