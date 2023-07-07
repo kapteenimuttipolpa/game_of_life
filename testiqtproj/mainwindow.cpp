@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     grid_view->setCacheMode(QGraphicsView::CacheBackground); // random optimization, not sure if it made it faster
     grid_view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate); //^^
     grid_view->setRenderHint(QPainter::Antialiasing, true); // ^^
+
     print_grid(active_grid, grid_view, scene);
 
     // Creates a button that updates current gen to next gen

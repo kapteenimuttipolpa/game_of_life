@@ -4,7 +4,6 @@
 #include "patterns.h"
 #include <QDialog>
 #include <QMouseEvent>
-//class MainWindow;
 namespace Ui {
 class Dialog;
 }
@@ -30,7 +29,6 @@ private slots:
     void on_RandpushButton_clicked();
 
     void print_preview(Pattern& selected_pattern);
-
 
 private:
     Ui::Dialog *ui;

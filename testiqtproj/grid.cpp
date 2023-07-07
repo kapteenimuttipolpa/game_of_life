@@ -27,7 +27,6 @@ void print_grid(const CoordVect& alive_cells, QGraphicsView* grid_view, QGraphic
                        QPen(Qt::NoPen),
                        QBrush(Qt::black));
     }
-
     grid_view->setScene(scene); // set the current scene to what we drew
 }
 
@@ -37,13 +36,11 @@ void print_grid(const CoordVect& alive_cells, QGraphicsView* grid_view, QGraphic
 Grid init_grid(CoordVect& alive_cells, int height, int width, Pattern& start_pattern) {
   int start_row = (height / 2) - (start_pattern.height / 2);
   int start_col = (width / 2) - (start_pattern.width / 2);
-
-  Grid grid(height, std::vector<Cell>(width));
-
+  Grid grid(height, std::vector<bool>(width));
   for (Coord c : start_pattern.coords) { // loop the start pattern coords
       // and push them to active grid and set the cells at coord ALIVE
     alive_cells.push_back({start_row + c.row, start_col + c.col});
-    grid[start_row + c.row][start_col + c.col].current_state = ALIVE;
+    grid[start_row + c.row][start_col + c.col] = ALIVE;
   }
 
   return grid;
@@ -71,7 +68,7 @@ int get_alive_neighbour(const Grid &grid, const int row, const int column) {
                 continue; // Skip the center cell (current cell)
             }
 
-            if (x >= 0 && x < rows && y >= 0 && y < cols && grid[x][y].current_state == ALIVE) {
+            if (x >= 0 && x < rows && y >= 0 && y < cols && grid[x][y] == ALIVE) {
                 count++; //Check boundaries of grid and if neighbor is alive
             }
         }
@@ -138,7 +135,7 @@ bool next_generation(Grid &grid, CoordVect& alive_cells) {
       }
     }
     for(auto& c : alive_cells){
-        grid[c.row][c.col].current_state = DEAD;
+        grid[c.row][c.col] = DEAD;
     }
     alive_cells = temp_grid;
     return is_changed;
@@ -152,7 +149,7 @@ bool next_generation(Grid &grid, CoordVect& alive_cells) {
 void update_grid(Grid &grid, CoordVect& alive_cells) {
 
   for (Coord c : alive_cells) {
-    grid[c.row][c.col].current_state = ALIVE;
+    grid[c.row][c.col] = ALIVE;
   }
 }
 

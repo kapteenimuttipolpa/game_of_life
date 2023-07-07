@@ -107,3 +107,4 @@ void Dialog::print_preview(Pattern& selected_pattern){
 
 }
 
+
