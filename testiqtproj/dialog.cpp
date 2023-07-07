@@ -27,6 +27,7 @@ Dialog::~Dialog(){
 void Dialog::on_buttonBox_accepted()
 {
     close();
+    main_window->on_clearButton_clicked();
     main_window->show();
 }
 
@@ -52,7 +53,7 @@ void Dialog::on_heightSlider_sliderReleased()
 
 void Dialog::on_comboBox_activated(int index)
 {
-    main_window->set_current_pattern(index);
+    main_window->set_current_pattern_dialog(index);
 }
 
 

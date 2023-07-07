@@ -24,6 +24,7 @@ public:
     void set_current_pattern(int index);
     void set_curr_pat(Pattern rand);
     void on_clearButton_clicked();
+    void set_current_pattern_dialog(int index);
     int get_lsize();
     int get_rsize();
     ~MainWindow();

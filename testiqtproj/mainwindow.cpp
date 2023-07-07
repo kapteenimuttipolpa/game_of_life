@@ -161,16 +161,16 @@ void MainWindow::on_speedSlider_sliderMoved()
 }
 void MainWindow::set_grid_height(int height){
     lsize = height;
-    scene->clear();
-    grid = init_grid(active_grid, lsize, rsize, current_pattern);
-    print_grid(active_grid, grid_view, scene);
+    //scene->clear();
+    //grid = init_grid(active_grid, lsize, rsize, current_pattern);
+    //print_grid(active_grid, grid_view, scene);
 
 }
 void MainWindow::set_grid_width(int width){
     rsize = width;
-    scene->clear();
-    grid = init_grid(active_grid, lsize, rsize, current_pattern);
-    print_grid(active_grid, grid_view, scene);
+    //scene->clear();
+    //grid = init_grid(active_grid, lsize, rsize, current_pattern);
+    //print_grid(active_grid, grid_view, scene);
 
 }
 int MainWindow::get_lsize(){
@@ -181,4 +181,7 @@ int MainWindow::get_rsize(){
 }
 void MainWindow::set_curr_pat(Pattern rand){
     current_pattern = rand;
+}
+void MainWindow::set_current_pattern_dialog(int index){
+    current_pattern = all_patterns[index];
 }
