@@ -14,21 +14,28 @@ int Utils::random_num(int a, int b)
     std::uniform_int_distribution distr{a, b};
     return distr(mt);
 }
-Pattern Utils::random_pattern(int height, int width)
+/**
+ * @brief Utils::random_pattern
+ * creates a randomized pattern
+ * @return
+ */
+Pattern Utils::random_pattern()
 {
-  Pattern rand_pattern {height, width, {{0,0}}};
-  for (int i = 0; i < height * width / 8; i++)
-  {
-    while (true)
+    int width = 20;
+    int height = 20;
+    int divider = 5;
+    Pattern rand_pattern {width, height, {}};
+    for (int i = 0; i < height * width / divider; i++)
     {
-      int x = random_num(0, height - 1);
-      int y = random_num(0, width - 1);
-      if (coord_found(rand_pattern.coords, {x,y}))
-        continue;
-      rand_pattern.coords.push_back({x,y});
-      break;
+      while (true)
+      {
+        int x = random_num(0, height - 1);
+        int y = random_num(0, width - 1);
+        if (coord_found(rand_pattern.coords, {x,y}))
+          continue;
+        rand_pattern.coords.push_back({x,y});
+        break;
+      }
     }
-  }
-
     return rand_pattern;
 }

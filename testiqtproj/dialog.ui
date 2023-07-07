@@ -59,7 +59,7 @@
     <item row="1" column="1">
      <widget class="QSlider" name="widthSlider">
       <property name="minimum">
-       <number>3</number>
+       <number>100</number>
       </property>
       <property name="maximum">
        <number>20000</number>
@@ -89,7 +89,7 @@
     <item row="0" column="1">
      <widget class="QSlider" name="heightSlider">
       <property name="minimum">
-       <number>3</number>
+       <number>100</number>
       </property>
       <property name="maximum">
        <number>20000</number>
@@ -179,6 +179,29 @@
      </widget>
     </item>
    </layout>
+  </widget>
+  <widget class="QGraphicsView" name="previewView">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>50</y>
+     <width>231</width>
+     <height>141</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>30</y>
+     <width>111</width>
+     <height>17</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Pattern preview</string>
+   </property>
   </widget>
  </widget>
  <resources/>

@@ -12,6 +12,7 @@ Dialog::Dialog(MainWindow* mainWindow, QWidget *parent) :
     ui(new Ui::Dialog),
     main_window(mainWindow)
 {
+    //sets the color of of lcd number widget
     ui->setupUi(this);
     auto palette = ui->heightLcdNumber->palette();
     palette.setColor(palette.WindowText, Qt::black);
@@ -19,11 +20,19 @@ Dialog::Dialog(MainWindow* mainWindow, QWidget *parent) :
     ui->heightLcdNumber->setPalette(palette);
     ui->widthLcdNumber->setPalette(palette);
 
+    //scene for pattern preview
+    QGraphicsScene* scene = new QGraphicsScene;
+    ui->previewView->setScene(scene);
+
+
 }
 Dialog::~Dialog(){
     delete ui;
 }
-
+/**
+ * @brief Dialog::on_buttonBox_accepted
+ * When accept button is pressed, inits
+ */
 void Dialog::on_buttonBox_accepted()
 {
     close();
@@ -53,22 +62,36 @@ void Dialog::on_heightSlider_sliderReleased()
 
 void Dialog::on_comboBox_activated(int index)
 {
+    selected_pattern = all_patterns[index];
+    print_preview(selected_pattern);
     main_window->set_current_pattern_dialog(index);
 }
 
 
 void Dialog::on_RandpushButton_clicked()
 {
-    int lsize = main_window->get_lsize();
-    int rsize = main_window->get_rsize();
-    if(lsize == 0 or rsize == 0){
-        return;
-    }
-    Pattern rand_p = Utils::random_pattern(lsize, rsize);
+    Pattern rand_p = Utils::random_pattern();
     main_window->set_curr_pat(rand_p);
     close();
     main_window->on_clearButton_clicked();
     main_window->show();
 }
+void Dialog::print_preview(Pattern& selected_pattern){
+    constexpr int cell_size = 4;
+    constexpr int spacing = 1;
+    QGraphicsScene* scene = new QGraphicsScene;
+    ui->previewView->setScene(scene);
+    scene->setForegroundBrush(Qt::NoBrush);
+    for(Coord c : selected_pattern.coords){
+        scene->addRect(c.col * (cell_size + spacing),
+                       c.row * (cell_size + spacing),
+                       cell_size,
+                       cell_size,
+                       QPen(Qt::NoPen),
+                       QBrush(Qt::black));
+    }
 
+    ui->previewView->setScene(scene);
+
+}
 

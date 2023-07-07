@@ -1,6 +1,7 @@
 #ifndef DIALOG_H
 #define DIALOG_H
 #include "mainwindow.h"
+#include "patterns.h"
 #include <QDialog>
 #include <QMouseEvent>
 //class MainWindow;
@@ -26,13 +27,17 @@ private slots:
 
     void on_comboBox_activated(int index);
 
-
     void on_RandpushButton_clicked();
+
+    void print_preview(Pattern& selected_pattern);
 
 
 private:
     Ui::Dialog *ui;
     MainWindow* main_window;
+    QGraphicsScene* scene;
+    MyGraphicsView* previewView;
+    Pattern selected_pattern;
 };
 
 #endif // DIALOG_H

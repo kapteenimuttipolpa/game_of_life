@@ -13,13 +13,13 @@ struct Cell {
 };
 
 using Grid = std::vector<std::vector<Cell>>;
-using Subgrid = std::vector<Coord>;
+using CoordVect = std::vector<Coord>;
 
-Grid init_grid(Subgrid& active_grid, int height, int width, Pattern& start_pattern);
-void print_grid(const Subgrid& active_grid, QGraphicsView* grid_view, QGraphicsScene* scene);
-int get_alive_neighbour(const Grid &grid, Subgrid& active_grid, const int row, const int column);
-bool next_generation(Grid &grid, Subgrid& active_grid);
-void update_grid(Grid &grid, Subgrid& active_grid);
+Grid init_grid(CoordVect& alive_cells, int height, int width, Pattern& start_pattern);
+void print_grid(const CoordVect& alive_cells, QGraphicsView* grid_view, QGraphicsScene* scene);
+int get_alive_neighbour(const Grid &grid, CoordVect& alive_cells, const int row, const int column);
+bool next_generation(Grid &grid, CoordVect& alive_cells);
+void update_grid(Grid &grid, CoordVect& alive_cells);
 bool coord_found(const std::vector<Coord>& coords, const Coord& targetCoord);
 void display_counters();
 #endif // !GRID_H

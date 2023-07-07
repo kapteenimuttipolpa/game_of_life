@@ -1,6 +1,12 @@
 #include "mygraphicsview.h"
 #include <QWheelEvent>
 #include <QScrollBar>
+/***
+ * Code snippet from stackoverflow
+ * Adds functionality to zoom in the view
+ * and move around using right-click
+ * ***/
+
 MyGraphicsView::MyGraphicsView(QWidget *parent)
     : QGraphicsView(parent)
 {

@@ -25,19 +25,12 @@ public:
     void set_curr_pat(Pattern rand);
     void on_clearButton_clicked();
     void set_current_pattern_dialog(int index);
-    int get_lsize();
-    int get_rsize();
     ~MainWindow();
 
 private slots:
     void on_pushButton_clicked();
     void on_startButton_clicked();
-    void perform_grid_update();
     void on_stopButton_clicked();
-    //void on_clearButton_clicked();
-
-   // void set_current_pattern(int index);
-
     void on_speedSlider_sliderMoved();
 
 
@@ -54,7 +47,7 @@ private:
     QComboBox* user_pattern_choise;
     QComboBox* comboBox;
     Grid grid;
-    Subgrid active_grid;
+    CoordVect active_grid;
     QSlider* speedSlider;
     QLabel* counter_label;
     int counter;

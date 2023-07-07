@@ -6,7 +6,7 @@
 #include <thread>
 namespace Utils {
     int random_num(int a, int b);
-    Pattern random_pattern(int height, int width);
+    Pattern random_pattern();
 
 }
 
