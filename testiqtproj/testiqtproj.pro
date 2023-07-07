@@ -13,7 +13,8 @@ SOURCES += \
     grid.cpp \
     main.cpp \
     mainwindow.cpp \
-    mygraphicsview.cpp
+    mygraphicsview.cpp \
+    utils.cpp
 
 HEADERS += \
     dialog.h \

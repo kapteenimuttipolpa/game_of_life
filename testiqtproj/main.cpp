@@ -8,6 +8,5 @@ int main(int argc, char *argv[])
     MainWindow* mainWindow = new MainWindow();
     Dialog d(mainWindow);
     d.show();
-    //w.show();
     return a.exec();
 }
