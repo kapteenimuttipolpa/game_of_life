@@ -8,6 +8,8 @@
 
 constexpr static int ALIVE = 1;
 constexpr static int DEAD = 0;
+constexpr int cell_size = 4;
+constexpr int spacing = 1;
 struct Cell {
   int current_state = DEAD;
 };

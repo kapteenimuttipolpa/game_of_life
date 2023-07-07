@@ -1,3 +1,7 @@
+/***
+ * pattern.h defines patterns that
+ * user can choose
+ * **/
 #ifndef PATTERNS_H
 #define PATTERNS_H
 

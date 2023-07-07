@@ -16,8 +16,6 @@
  * @param grid
  */
 void print_grid(const CoordVect& alive_cells, QGraphicsView* grid_view, QGraphicsScene* scene) {
-    constexpr int cell_size = 4;
-    constexpr int spacing = 1;
     scene->setForegroundBrush(Qt::NoBrush); // sets the bg color as white/nothing
     // so we dont need to print empty cells all the time
 
