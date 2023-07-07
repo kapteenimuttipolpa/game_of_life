@@ -8,6 +8,7 @@
 #include <QGraphicsView>
 #include "mygraphicsview.h"
 #include <vector>
+#include <QLabel>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -48,12 +49,14 @@ private:
     QPushButton* stopButton;
     QPushButton* clearButton;
     QTimer* timer;
-    Pattern current_pattern = copperhead;
+    Pattern current_pattern = full;
     QComboBox* user_pattern_choise;
     QComboBox* comboBox;
     Grid grid;
     Subgrid active_grid;
     QSlider* speedSlider;
+    QLabel* counter_label;
+    int counter;
     int speed = 500;
     int lsize = 50;
     int rsize = 50;

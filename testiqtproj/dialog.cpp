@@ -20,8 +20,7 @@ Dialog::Dialog(MainWindow* mainWindow, QWidget *parent) :
     ui->widthLcdNumber->setPalette(palette);
 
 }
-Dialog::~Dialog()
-{
+Dialog::~Dialog(){
     delete ui;
 }
 

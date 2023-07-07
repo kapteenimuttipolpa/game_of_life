@@ -34,12 +34,7 @@ void print_grid(const Grid &grid, QGraphicsView* grid_view, QGraphicsScene* scen
         }
     }
     grid_view->setScene(scene);
-    //grid_view->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
-
-
 }
-
-// bool validate_grid_size(int height, int width, Pattern start_pattern) {}
 
 /*
 **  Initializes grid with given size and selected pattern
@@ -49,10 +44,11 @@ Grid init_grid(Subgrid& active_grid, int height, int width, Pattern& start_patte
   int start_col = (width / 2) - (start_pattern.width / 2);
 
   Grid grid{};
+  grid.reserve(height);
   for (int row = 0; row < height; ++row) {
     std::vector<Cell> new_row;
+    new_row.reserve(width);
     for (int col = 0; col < width; ++col) {
-      //Cell new_cell{};
         new_row.push_back({});
     }
     grid.push_back(new_row);
@@ -135,14 +131,21 @@ bool next_generation(Grid &grid, Subgrid& active_grid) {
       }
     }
   }
-  for (size_t i = 0; i < active_grid.size(); i++)
-  {
-    if (active_grid[i].col == temp_grid[i].col && active_grid[i].row == temp_grid[i].row)
-      continue ;
-    is_changed = true;
-  }
-  active_grid = temp_grid;
-  return is_changed;
+  //Checks if terminal state was reached
+  if (active_grid.size() != temp_grid.size())
+      is_changed = true;
+    else
+    {
+      for (size_t i = 0; i < active_grid.size(); i++)
+      {
+        if (active_grid[i].col == temp_grid[i].col && active_grid[i].row == temp_grid[i].row)
+          continue;
+        is_changed = true;
+        break;
+      }
+    }
+    active_grid = temp_grid;
+    return is_changed;
 }
 /**
  * @brief update_grid
