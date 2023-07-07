@@ -15,24 +15,19 @@
  * prints the current state of grid
  * @param grid
  */
-void print_grid(const Grid &grid, QGraphicsView* grid_view, QGraphicsScene* scene) {
+void print_grid(const Subgrid& active_grid, QGraphicsView* grid_view, QGraphicsScene* scene) {
     constexpr int cell_size = 4;
     constexpr int spacing = 1;
     scene->setForegroundBrush(Qt::NoBrush);
-    for (size_t row = 0; row < grid.size(); ++row) {
-        for (size_t col = 0; col < grid[row].size(); ++col) {
-            if(grid[row][col].current_state == ALIVE){
-                QColor color = Qt::black;
-                scene->addRect(col * (cell_size + spacing),
-                               row * (cell_size + spacing),
-                               cell_size,
-                               cell_size,
-                               QPen(Qt::NoPen),
-                               QBrush(color));
-            }
-
-        }
+    for(Coord c : active_grid){
+        scene->addRect(c.col * (cell_size + spacing),
+                       c.row * (cell_size + spacing),
+                       cell_size,
+                       cell_size,
+                       QPen(Qt::NoPen),
+                       QBrush(Qt::black));
     }
+
     grid_view->setScene(scene);
 }
 
@@ -43,16 +38,8 @@ Grid init_grid(Subgrid& active_grid, int height, int width, Pattern& start_patte
   int start_row = (height / 2) - (start_pattern.height / 2);
   int start_col = (width / 2) - (start_pattern.width / 2);
 
-  Grid grid{};
-  grid.reserve(height);
-  for (int row = 0; row < height; ++row) {
-    std::vector<Cell> new_row;
-    new_row.reserve(width);
-    for (int col = 0; col < width; ++col) {
-        new_row.push_back({});
-    }
-    grid.push_back(new_row);
-  }
+  Grid grid(height, std::vector<Cell>(width));
+
   for (Coord c : start_pattern.coords) {
     active_grid.push_back({start_row + c.row, start_col + c.col});
     grid[start_row + c.row][start_col + c.col].current_state = ALIVE;
@@ -112,10 +99,12 @@ bool coord_found(const std::vector<Coord>& coords, const Coord& targetCoord) {
 bool next_generation(Grid &grid, Subgrid& active_grid) {
   Subgrid temp_grid {};
   bool is_changed = false;
+  const int g_size = static_cast<int>(grid.size());
+  const int row_size = static_cast<int>(grid[0].size());
   for (Coord c : active_grid) {
-    for (int x = c.row - 1; x <= c.row + 1; x++) { // loop the neightbors of alive cells
+    for (int x = c.row - 1; x <= c.row + 1; x++) { // loop the neighbors of alive cells
       for (int y = c.col - 1; y <= c.col + 1; y++) {
-        if (x < 0 || static_cast<size_t>(x) >= grid.size() || y < 0 || static_cast<size_t>(y) >= grid[0].size())
+        if (x < 0 || x >= g_size|| y < 0 || y >= row_size)
           continue;
         if (coord_found(temp_grid, {x, y})) // check if current coord is already in temp grid
           continue;
@@ -144,6 +133,9 @@ bool next_generation(Grid &grid, Subgrid& active_grid) {
         break;
       }
     }
+    for(auto& c : active_grid){
+        grid[c.row][c.col].current_state = DEAD;
+    }
     active_grid = temp_grid;
     return is_changed;
 }
@@ -154,12 +146,7 @@ bool next_generation(Grid &grid, Subgrid& active_grid) {
  * @param grid
  */
 void update_grid(Grid &grid, Subgrid& active_grid) {
-  for (auto& row : grid) {
-    for (auto& col : row)
-    {
-      col.current_state = DEAD;
-    }
-  }
+
   for (Coord c : active_grid) {
     grid[c.row][c.col].current_state = ALIVE;
   }

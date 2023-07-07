@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     grid_view->setCacheMode(QGraphicsView::CacheBackground); // random optimization, not sure if it made it faster
     grid_view->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate); //^^
     grid_view->setRenderHint(QPainter::Antialiasing, true); // ^^
-    print_grid(grid, grid_view, scene);
+    print_grid(active_grid, grid_view, scene);
 
     // Creates a button that updates current gen to next gen
     nextButton = new QPushButton("Next Generation", this);
@@ -113,7 +113,7 @@ void MainWindow::on_pushButton_clicked()
     next_generation(grid, active_grid);
     update_grid(grid, active_grid);
     scene->clear();
-    print_grid(grid, grid_view, scene);
+    print_grid(active_grid, grid_view, scene);
     counter++;
     counter_label->setText("Evolution " + QString::number(counter));
 }
@@ -132,7 +132,7 @@ void MainWindow::on_clearButton_clicked(){
     counter = 0;
     counter_label->setText("Evolution: 0");
     grid = init_grid(active_grid, lsize, rsize, current_pattern);
-    print_grid(grid, grid_view, scene);
+    print_grid(active_grid, grid_view, scene);
 }
 void MainWindow::perform_grid_update(){
     bool is_changed = next_generation(grid, active_grid);
@@ -141,7 +141,7 @@ void MainWindow::perform_grid_update(){
     }
     else update_grid(grid, active_grid);
     scene->clear();
-    print_grid(grid, grid_view, scene);
+    print_grid(active_grid, grid_view, scene);
 }
 void MainWindow::set_current_pattern(int index){
     timer->stop();
@@ -149,7 +149,7 @@ void MainWindow::set_current_pattern(int index){
     scene->clear();
     current_pattern = all_patterns[index];
     grid = init_grid(active_grid, lsize, rsize, current_pattern);
-    print_grid(grid, grid_view, scene);
+    print_grid(active_grid, grid_view, scene);
     counter = 0;
     counter_label->setText("Counter: 0");
 }
@@ -163,14 +163,14 @@ void MainWindow::set_grid_height(int height){
     lsize = height;
     scene->clear();
     grid = init_grid(active_grid, lsize, rsize, current_pattern);
-    print_grid(grid, grid_view, scene);
+    print_grid(active_grid, grid_view, scene);
 
 }
 void MainWindow::set_grid_width(int width){
     rsize = width;
     scene->clear();
     grid = init_grid(active_grid, lsize, rsize, current_pattern);
-    print_grid(grid, grid_view, scene);
+    print_grid(active_grid, grid_view, scene);
 
 }
 int MainWindow::get_lsize(){
