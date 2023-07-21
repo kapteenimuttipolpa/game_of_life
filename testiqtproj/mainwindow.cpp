@@ -16,7 +16,7 @@
 #include <QDebug>
 #include <QSlider>
 #include <QLabel>
-
+#include <QElapsedTimer>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent)
     // Creates a button that updates current gen to next gen
     nextButton = new QPushButton("Next Generation", this);
     connect(nextButton, &QPushButton::clicked, this, &MainWindow::on_pushButton_clicked);
-
     // Create a start button that starts a timer (loop)
     startButton = new QPushButton("Start", this);
     connect(startButton, &QPushButton::clicked, this, &MainWindow::on_startButton_clicked);
@@ -84,6 +83,10 @@ MainWindow::MainWindow(QWidget *parent)
     counter_label->setText("Counter: 0");
     statusBar()->addWidget(counter_label);
 
+    elapsed_label = new QLabel(this);
+    elapsed_label->setText("Time elapsed: ");
+    statusBar()->addWidget(elapsed_label);
+
     // Create a central widget to hold the layout
     QWidget* centralWidget = new QWidget(this);
     mainLayout->addLayout(buttonLayout);
@@ -95,6 +98,7 @@ MainWindow::MainWindow(QWidget *parent)
     // button gets clicked every time the timer ticks
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout,this, &MainWindow::on_pushButton_clicked);
+    q_timer = new QElapsedTimer;
 }
 
 MainWindow::~MainWindow()
@@ -120,6 +124,9 @@ void MainWindow::on_pushButton_clicked()
     print_grid(active_grid, grid_view, scene);
     counter++;
     counter_label->setText("Evolution " + QString::number(counter));
+    if(counter == 20000){
+        on_clearButton_clicked();
+    }
 }
 /**
  * @brief MainWindow::on_startButton_clicked
@@ -128,6 +135,7 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_startButton_clicked(){
 
     timer->start(speed);
+    q_timer->start();
 }
 /**
  * @brief MainWindow::on_stopButton_clicked
@@ -146,6 +154,9 @@ void MainWindow::on_clearButton_clicked(){
     scene->clear();
     counter = 0;
     counter_label->setText("Evolution: 0");
+    qint64 elapsed_time = q_timer->nsecsElapsed();
+    double seconds = elapsed_time / 1000000000.0;
+    elapsed_label->setText("Elapsed seconds: " + QString::number(seconds));
     grid = init_grid(active_grid, lsize, rsize, current_pattern);
     print_grid(active_grid, grid_view, scene);
 }

@@ -1,7 +1,7 @@
 #include "dialog.h"
 #include "ui_dialog.h"
 #include "mainwindow.h"
-#include "customgraphicsview.h"
+//#include "customgraphicsview.h"
 #include "utils.h"
 #include "patterns.h"
 #include <QtWidgets>

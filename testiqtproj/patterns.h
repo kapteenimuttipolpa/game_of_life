@@ -18,6 +18,21 @@ struct Pattern {
   std::vector<Coord> coords{};
 };
 
+inline bool operator==(Coord c1, Coord c2) { return c1.row == c2.col && c1.row == c2.col; }
+inline bool operator!=(Coord c1, Coord c2) { return !(c1==c2); } // Not strictly necessary
+
+struct CoordHash
+{
+  std::size_t operator()(Coord xy) const
+  {
+      auto hasher = std::hash<int>();
+      auto xhash = hasher(xy.row);
+      auto yhash = hasher(xy.col);
+      // Combine hash values (magic!)
+      return xhash ^ (yhash + 0x9e3779b9 + (xhash << 6) + (xhash >> 2));
+  }
+};
+
 inline static Pattern blinker{1, 3, {{0, 0}, {0, 1}, {0, 2}}};
 
 inline static Pattern block{2, 2, {{0, 0}, {0, 1}, {1, 0}, {1, 1}}};

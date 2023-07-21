@@ -5,14 +5,16 @@
 #include <QColor>
 #include <QGraphicsView>
 #include <QGraphicsScene>
+#include <unordered_set>
 
 constexpr static bool ALIVE = true;
 constexpr static bool DEAD = false;
 constexpr static int cell_size = 4;
 constexpr static int spacing = 1;
+
 using Grid = std::vector<std::vector<bool>>;
 using CoordVect = std::vector<Coord>;
-
+using CoordSet = std::unordered_set<Coord, CoordHash>;
 Grid init_grid(CoordVect& alive_cells, int height, int width, Pattern& start_pattern);
 void print_grid(const CoordVect& alive_cells, QGraphicsView* grid_view, QGraphicsScene* scene);
 int get_alive_neighbour(const Grid &grid, CoordVect& alive_cells, const int row, const int column);
