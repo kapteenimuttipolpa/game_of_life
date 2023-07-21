@@ -9,6 +9,7 @@
 #include "mygraphicsview.h"
 #include <vector>
 #include <QLabel>
+#include <QElapsedTimer>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -50,6 +51,8 @@ private:
     CoordVect active_grid;
     QSlider* speedSlider;
     QLabel* counter_label;
+    QElapsedTimer* q_timer;
+    QLabel* elapsed_label;
     int counter;
     int speed = 500;
     int lsize = 50;
